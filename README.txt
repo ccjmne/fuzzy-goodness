@@ -6,14 +6,12 @@ sift through things.
 Uses asciinema [2] for recordings.
 
 
-edit-ansible.sh ----------------------------------------------------------------
+edit-ansible.sh -------------- https://asciinema.org/a/WDErUhBgILYZnbtnxijDFRV8s
 
     It just opens in your $EDITOR a view that contains only the configuration
     for the project you want, in the environment you chose (possibly all at
     once).  You edit that view, save its content and it gets magically merged
     back into the gigantic original document.
-
-        https://asciinema.org/a/WDErUhBgILYZnbtnxijDFRV8s
 
 
 References ---------------------------------------------------------------------
