@@ -7,27 +7,24 @@ D=$(mktemp)
 fzf --header 'Ctrl-R to cycle through environments' \
     --with-nth {1} \
     --preview '[[ $FZF_PROMPT =~ all* ]] &&
-        yq --arg name {1} --yaml-roundtrip '\''.services.[] | select(.name == $name )'\'' $F ||
-        yq --yaml-roundtrip --arg grp {2} '\''.services.[] | select (.service_group == $grp)'\'' $F' \
+        yq --yaml-roundtrip --arg name {1} '\''.services.[] | select(.name == $name)'\'' $F ||
+        yq --yaml-roundtrip --arg grp  {2} '\''.services.[] | select(.service_group == $grp)'\'' $F' \
     --bind 'start,ctrl-r:transform:
         case $FZF_PROMPT in
-            all*)      env="sit" ;;
+            all*)      env="sit"      ;;
             sit*)      env="minilive" ;;
-            minilive*) env="live" ;;
-            live*)     env="all" ;;
+            minilive*) env="live"     ;;
+            live*)     env="all"      ;;
         esac
         if [[ $env == "all" ]]; then
-            reload="yq '\''.services.[] | {name} | join (\" \")'\'' $F --raw-output | sort --unique"
+            reload=".services.[] | {name} | join(\" \")"
         else
-            reload="yq '\''.services.[] | select(.service_group | test(\"_${env}_\")) | {name,service_group} | join (\" \")'\'' $F --raw-output | sort"
+            reload=".services.[] | select(.service_group | test(\"_${env}_\")) | {name,service_group} | join(\" \")"
         fi
-        echo "change-prompt($env> )+reload($reload)+preview($preview)"' \
-    --bind 'enter:become(
-        if [[ $FZF_PROMPT =~ all* ]]; then
-            yq --arg name {1} --yaml-roundtrip '\''.services.[] | select(.name == $name )'\'' $F;
-        else
-            yq --yaml-roundtrip --arg grp {2} '\''.services.[] | select (.service_group == $grp)'\'' $F
-        fi)' \
+        echo "change-prompt($env> )+reload(yq '\''$reload'\'' $F --raw-output | sort --unique)"' \
+    --bind 'enter:become([[ $FZF_PROMPT =~ all* ]] &&
+        yq --yaml-roundtrip --arg name {1} '\''.services.[] | select(.name == $name)'\'' $F ||
+        yq --yaml-roundtrip --arg grp  {2} '\''.services.[] | select(.service_group == $grp)'\'' $F)' \
     > $D
 
 if [[ -s $D ]]; then
