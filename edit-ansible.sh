@@ -3,9 +3,10 @@
 export F=admin/ansible/mercateo-service-groups.yml
 export env=all
 
+D=$(mktemp)
 fzf --header 'Ctrl-R to cycle through environments' \
-    --with-nth={1} \
-    --preview='[[ $FZF_PROMPT =~ all* ]] &&
+    --with-nth {1} \
+    --preview '[[ $FZF_PROMPT =~ all* ]] &&
         yq --arg name {1} --yaml-roundtrip '\''.services.[] | select(.name == $name )'\'' $F ||
         yq --yaml-roundtrip --arg grp {2} '\''.services.[] | select (.service_group == $grp)'\'' $F' \
     --bind 'start,ctrl-r:transform:
@@ -21,9 +22,24 @@ fzf --header 'Ctrl-R to cycle through environments' \
             reload="yq '\''.services.[] | select(.service_group | test(\"_${env}_\")) | {name,service_group} | join (\" \")'\'' $F --raw-output | sort"
         fi
         echo "change-prompt($env> )+reload($reload)+preview($preview)"' \
-    --bind='enter:become(
+    --bind 'enter:become(
         if [[ $FZF_PROMPT =~ all* ]]; then
-            bash -c "grep -Hn \"\bname:.*$(echo {1})\" $F | $EDITOR -q - && git add --patch"
+            yq --arg name {1} --yaml-roundtrip '\''.services.[] | select(.name == $name )'\'' $F;
         else
-            bash -c "grep -Hn {2} $F | $EDITOR -q - && git add --patch"
-        fi)'
+            yq --yaml-roundtrip --arg grp {2} '\''.services.[] | select (.service_group == $grp)'\'' $F
+        fi)' \
+    > $D
+
+if [[ -s $D ]]; then
+    $EDITOR $D +'set ft=yaml'
+    if [[ $? -eq 0 && -s $D ]]; then
+        E=$(mktemp)
+        yq --yaml-output --indentless --width 999 '
+            ([inputs] | map({key:.service_group,value:.}) | from_entries) as $M
+            | {services:.services | map($M[.service_group] // .)}
+        ' $F $D > $E
+        cat $E > $F
+        git add --patch $F
+    fi
+    rm $D $E
+fi
