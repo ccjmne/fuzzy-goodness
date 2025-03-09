@@ -35,8 +35,8 @@ if [[ -s $D ]]; then
             ([inputs] | map({key:.service_group,value:.}) | from_entries) as $M
             | {services:.services | map($M[.service_group] // .)}
         ' $F $D > $E
-        cat $E > $F
+        mv $E $F
         git add --patch $F
     fi
-    rm $D $E
+    rm $D
 fi
