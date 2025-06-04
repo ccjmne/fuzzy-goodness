@@ -12,12 +12,13 @@ git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,value
         --preview 'printf "%s\n" {+} | sed "s/^/${FZF_PROMPT%> }: /"' \
         --bind 'start,ctrl-r:transform:
             case $FZF_PROMPT in
-                Signed-off-by*)  trailer="Acked-by"       ;;
-                Acked-by*)       trailer="Reviewed-by"    ;;
-                Reviewed-by*)    trailer="Helped-by"      ;;
-                Helped-by*)      trailer="Reported-by"    ;;
-                Reported-by*)    trailer="Co-authored-by" ;;
-                Co-authored-by*) trailer="Signed-off-by"  ;;
+                Signed-off-by*)  trailer=Reviewed-by    ;;
+                Reviewed-by*)    trailer=Acked-by       ;;
+                Acked-by*)       trailer=Tested-by      ;;
+                Tested-by*)      trailer=Reported-by    ;;
+                Reported-by*)    trailer=Suggested-by   ;;
+                Suggested-by*)   trailer=Co-authored-by ;;
+                Co-authored-by*) trailer=Signed-off-by  ;;
             esac
             echo "change-prompt($trailer> )+refresh-preview"' \
         --bind 'enter:become(git commit --template <(printf "\n\n"; printf "%s\n" {+} | sed "s/^/${FZF_PROMPT%> }: /"))'
