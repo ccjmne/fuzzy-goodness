@@ -3,7 +3,7 @@
 # TODO: Support amending HEAD
 # TODO: Support adding multiple types of trailers
 #       I mean adding some Co-authored-by and some Signed-off-by at once.
-export trailer=Signed-off-by
+export trailer=Co-authored-by
 git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,valueonly)%n%(trailers:key=Acked-by,valueonly)%n%(trailers:key=Reviewed-by,valueonly)%n%(trailers:key=Helped-by,valueonly)%n%(trailers:key=Reported-by,valueonly)%n%(trailers:key=Co-authored-by,valueonly)' \
     | grep . \
     | awk '!M[$0]++' \

@@ -29,6 +29,14 @@ find-contributors.sh ---------------------------------------- <no recording yet>
           20302 Suggested-by
            7908 Co-developed-by
 
+    Bindings ...................................................................
+
+        Ctrl-R  Cycle through available trailers by order of their
+                prominence through the Linux kernel repository.
+
+    Dependencies ...............................................................
+
+           Git  https://git-scm.com/
 
 edit-service-groups.sh ------- https://asciinema.org/a/ms9qxEUyvH2onWnUJPOUuNoAg
 
@@ -37,6 +45,21 @@ edit-service-groups.sh ------- https://asciinema.org/a/ms9qxEUyvH2onWnUJPOUuNoAg
     scoped partial view of it, and have it automagically merged back cleanly
     into the original document.  Behaves well even if your configuration
     entries are thousands of lines apart.
+
+    Bindings ...................................................................
+
+        Ctrl-R  Cycle through available environments (dev, minilive, live, all).
+
+    Dependencies ...............................................................
+
+        A text  https://www.vim.org/ or
+        editor  https://neovim.io/
+
+            yq  https://github.com/kislyuk/yq
+                Note: this script requires specifically that yq utility.  It
+                is the one that's a mere wrapper around actual invocations
+                of jq, not the lightweight, portable Go implementation that
+                doesn't automatically benefit from all the jq features.
 
 
 References ---------------------------------------------------------------------
