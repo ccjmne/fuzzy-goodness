@@ -38,5 +38,5 @@ if [[ -s $D ]]; then
         mv $E $F
         git add --patch $F
     fi
-    rm $D
 fi
+rm $D
