@@ -9,17 +9,16 @@ Uses asciinema [2] for recordings.
 
 find-contributors.sh ---------------------------------------- <no recording yet>
 
-    Assists you in crediting contributors while creating your Git commit.
+    Assists you in crediting contributors in your Git commits.
 
-    I picked the trailers from logs of the Linux kernel [3] that see the
-    most usage.  I however replaced Co-developed-by by Co-authored-by
-    as it is the most eminently prominent alternative (to not say "the
-    de-facto standard") since GitHub started recognising it in 2017 to
-    credit multiple authors for a commit.
+    I picked the trailers from the Linux kernel [3] that see the most usage,
+    with an exception made for Co-authored-by to supplement Co-developed-by
+    as the most eminently prominent alternative (not to say "the de-facto
+    standard") since GitHub started recognising it in 2017 to credit
+    multiple authors for a commit.
 
-    For reference, here are the foremost trailers (normalised for case)
-    found across the commits reachable from the tip of the kernel's master
-    branch as of June 2025:
+    Here are the foremost trailers (normalised for case) found across the
+    ancestors of the tip of the kernel's master branch as of June 2025:
 
         2523341 Signed-off-by
          393276 Reviewed-by
