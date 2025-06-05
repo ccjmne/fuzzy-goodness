@@ -24,4 +24,4 @@ git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,value
                 Co-authored-by*) trailer=Signed-off-by  ;;
             esac
             echo "change-prompt($trailer> )+refresh-preview"' \
-        --bind 'enter:become(git commit --template <(printf "\n"; cat $WIP))'
+        --bind 'enter:become(git commit --template <(sed "1s/^/\n/" $WIP))'
