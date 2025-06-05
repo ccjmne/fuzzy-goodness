@@ -1,6 +1,9 @@
 #! /usr/bin/env bash
 
 # TODO: Support amending HEAD
+# TODO: Automatically ctrl-y on enter
+#       Actually, just always show in the preview the current selection
+#       in addition to the ctrl-y-committed ones.
 export WIP=$(mktemp)
 export trailer=Co-authored-by
 git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,valueonly)%n%(trailers:key=Acked-by,valueonly)%n%(trailers:key=Reviewed-by,valueonly)%n%(trailers:key=Helped-by,valueonly)%n%(trailers:key=Reported-by,valueonly)%n%(trailers:key=Co-authored-by,valueonly)' \
@@ -24,3 +27,4 @@ git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,value
             esac
             echo "change-prompt($trailer> )+refresh-preview"' \
         --bind 'enter:become(git commit --template <(sed "1s/^/\n/" $WIP))'
+rm $WIP
