@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 
 # TODO: Support amending HEAD
+# TODO: Implement contributors deboubling
+#       Probably based on their email, if available,
+#       and most likely simply prioritising recency rather than frequency.
+# TODO: Filter out contributors already anchored w/ current trailer
 export WIP=$(mktemp)
 export trailer=Co-authored-by
 src=(Signed-off-by Reviewed-by Acked-by Tested-by Reported-by Suggested-by Co-developed-by Co-authored-by)
