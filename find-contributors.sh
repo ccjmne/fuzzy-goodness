@@ -6,7 +6,8 @@
 #       in addition to the ctrl-y-committed ones.
 export WIP=$(mktemp)
 export trailer=Co-authored-by
-git log --all --pretty='%an <%aE>%n%cn <%cE>%n%(trailers:key=Signed-off-by,valueonly)%n%(trailers:key=Acked-by,valueonly)%n%(trailers:key=Reviewed-by,valueonly)%n%(trailers:key=Helped-by,valueonly)%n%(trailers:key=Reported-by,valueonly)%n%(trailers:key=Co-authored-by,valueonly)' \
+src=(Signed-off-by Reviewed-by Acked-by Tested-by Reported-by Suggested-by Co-developed-by Co-authored-by)
+git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,valueonly)' ${src[@]})" \
     | awk '$0 && !M[$0]++' \
     | fzf --header 'Ctrl-R to cycle through trailers' \
         --multi \
