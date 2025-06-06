@@ -1,21 +1,21 @@
 #! /usr/bin/env bash
 
 # TODO: Support amending HEAD
-# TODO: Automatically ctrl-y on enter
-#       Actually, just always show in the preview the current selection
-#       in addition to the ctrl-y-committed ones.
 export WIP=$(mktemp)
 export trailer=Co-authored-by
 src=(Signed-off-by Reviewed-by Acked-by Tested-by Reported-by Suggested-by Co-developed-by Co-authored-by)
 git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,valueonly)' ${src[@]})" \
     | awk '$0 && !M[$0]++' \
-    | fzf --header 'Ctrl-R to cycle through trailers' \
+    | fzf \
+        --header 'Ctrl-R to cycle through trailers, Ctrl-Y to validate selection' \
         --multi \
-        --preview 'cat $WIP' \
+        --preview '
+            t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
+            sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP"' \
         --bind 'ctrl-y:transform:
             t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
-            sh -c "git interpret-trailers --if-exists addIfDifferent --in-place $t $WIP"
-            echo "deselect-all+refresh-preview"' \
+            sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP --in-place"
+            echo "deselect-all+clear-query+first+refresh-preview"' \
         --bind 'start,ctrl-r:transform:
             case $FZF_PROMPT in
                 Signed-off-by*)  trailer=Reviewed-by    ;;
@@ -27,5 +27,8 @@ git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,value
                 Co-authored-by*) trailer=Signed-off-by  ;;
             esac
             echo "change-prompt($trailer> )+refresh-preview"' \
-        --bind 'enter:become(git commit --template <(sed "1s/^/\n/" $WIP))'
+        --bind 'enter:become:
+            t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
+            sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP --in-place"
+            git commit --allow-empty --template <(sed "1s/^/\n/" $WIP)'
 rm $WIP
