@@ -51,14 +51,14 @@ edit-service-groups.sh ------- https://asciinema.org/a/ms9qxEUyvH2onWnUJPOUuNoAg
 
     Dependencies ...............................................................
 
-        A text  https://www.vim.org/ or
-        editor  https://neovim.io/
+        A text  https://www.vim.org/ or https://neovim.io/
+        editor
 
             yq  https://github.com/kislyuk/yq
-                Note: this script requires specifically that yq utility.  It
-                is the one that's a mere wrapper around actual invocations
-                of jq, not the lightweight, portable Go implementation that
-                doesn't automatically benefit from all the jq features.
+                Note: this script requires specifically *that* yq utility.  It
+                is the one that's a mere wrapper around actual invocations of
+                jq, not the lightweight, portable Go implementation that doesn't
+                automatically benefit from all the jq features.
 
 
 References ---------------------------------------------------------------------
