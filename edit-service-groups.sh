@@ -1,9 +1,8 @@
-#! /usr/bin/env bash
+#! /bin/sh
 
 export F=admin/ansible/mercateo-service-groups.yml
 export env=all
 
-D=$(mktemp)
 fzf --header 'Ctrl-R to cycle through environments' \
     --with-nth {1} \
     --preview '[[ $FZF_PROMPT =~ all* ]] &&
@@ -25,18 +24,9 @@ fzf --header 'Ctrl-R to cycle through environments' \
     --bind 'enter:become([[ $FZF_PROMPT =~ all* ]] &&
         yq --yaml-roundtrip --arg name {1} '\''.services.[] | select(.name == $name)'\'' $F ||
         yq --yaml-roundtrip --arg grp  {2} '\''.services.[] | select(.service_group == $grp)'\'' $F)' \
-    > $D
-
-if [[ -s $D ]]; then
-    $EDITOR $D +'set ft=yaml'
-    if [[ $? -eq 0 && -s $D ]]; then
-        E=$(mktemp)
-        yq --yaml-output --indentless --width 999 '
-            ([inputs] | map({key:.service_group,value:.}) | from_entries) as $M
-            | {services:.services | map($M[.service_group] // .)}
-        ' $F $D > $E
-        mv $E $F
-        git add --patch $F
-    fi
-fi
-rm $D
+    | ifne vipe --suffix yaml \
+    | yq --yaml-output --indentless --width 999 '
+        ([inputs] | map({key:.service_group,value:.}) | from_entries) as $M
+        | {services:.services | map($M[.service_group] // .)}
+    ' $F - | sponge $F \
+    && git add --patch $F
