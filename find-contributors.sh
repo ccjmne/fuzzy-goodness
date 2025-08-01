@@ -16,7 +16,7 @@ git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,value
         --bind 'ctrl-y:transform:
             t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
             sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP --in-place"
-            echo "clear-selection+clear-query+first+refresh-preview"' \
+            echo "clear-multi+clear-query+first+refresh-preview"' \
         --bind 'start,ctrl-r:transform:
             case $FZF_PROMPT in
                 Signed-off-by*)  trailer=Reviewed-by    ;;
