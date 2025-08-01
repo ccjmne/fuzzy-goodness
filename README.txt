@@ -54,6 +54,13 @@ edit-service-groups.sh ------- https://asciinema.org/a/ms9qxEUyvH2onWnUJPOUuNoAg
         A text  https://www.vim.org/ or https://neovim.io/
         editor
 
+     moreutils  https://joeyh.name/code/moreutils/
+                This script adopted moreutils in 3bc59d6.  Seeing as it is
+                specifically tailored to our current workflow—suggesting that
+                it needn't be portable, this tool shall serve as more of a
+                reference than a practical utility, hence the unapologetic
+                dependency on the reliable moreutils.
+
             yq  https://github.com/kislyuk/yq
                 Note: this script requires specifically *that* yq utility.  It
                 is the one that's a mere wrapper around actual invocations of
