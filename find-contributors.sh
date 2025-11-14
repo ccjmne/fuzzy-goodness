@@ -12,7 +12,7 @@ git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,value
         --multi \
         --preview '
             t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
-            sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP"' \
+            sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP | bat --language=toml --color=always"' \
         --bind 'ctrl-y:transform:
             t=$(printf "--trailer='\''${FZF_PROMPT%> }: %s'\'' " {+})
             sh -c "git interpret-trailers --if-exists addIfDifferent $t $WIP --in-place"
