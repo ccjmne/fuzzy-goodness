@@ -6,8 +6,8 @@ export env=all
 fzf --header 'Ctrl-R to cycle through environments' \
     --with-nth {1} \
     --preview '[[ $FZF_PROMPT =~ all* ]] &&
-        yq --yaml-roundtrip --arg name {1} '\''.services.[] | select(.name == $name)'\'' $F ||
-        yq --yaml-roundtrip --arg grp  {2} '\''.services.[] | select(.service_group == $grp)'\'' $F' \
+        yq --yaml-roundtrip --arg name {1} ".services.[] | select(.name == \$name)" "$F"         | bat --language=yaml --color=always ||
+        yq --yaml-roundtrip --arg grp  {2} ".services.[] | select(.service_group == \$grp)" "$F" | bat --language=yaml --color=always' \
     --bind 'start,ctrl-r:transform:
         case $FZF_PROMPT in
             all*)      env="sit"      ;;
