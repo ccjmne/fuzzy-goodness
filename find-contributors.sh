@@ -5,7 +5,7 @@
 export WIP=$(mktemp)
 export trailer=Co-authored-by
 src=(Signed-off-by Reviewed-by Acked-by Tested-by Reported-by Suggested-by Co-developed-by Co-authored-by)
-git log --all --pretty="%an <%aE>%n%cn <%cE>$(printf '\n%%(trailers:key=%s,valueonly)' ${src[@]})" \
+git log --all --pretty="%aN <%aE>%n%cN <%cE>$(printf '\n%%(trailers:key=%s,valueonly)' ${src[@]})" \
     | awk '$0 && !M[tolower($0)]++' \
     | fzf \
         --multi \
